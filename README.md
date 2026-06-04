@@ -2,9 +2,9 @@
 
 This is the official PyTorch codes for the paper: [LightQANet: Quantized and Adaptive Feature  Learning for Low-Light Image Enhancement](https://ieeexplore.ieee.org/abstract/document/11417255)
 
->This paper has been accepted to the Engineering Applications of Artificial Intelligence (EAAI).
+>This paper has been accepted to the IEEE Transactions on Multimedia (TMM) 2026.
 
-<img src="images/LightQANet.png" width="800px">
+<img src="images/framework5.pdf" width="800px">
 
 ## Abstract:
 Low-light image enhancement (LLIE) aims to improve illumination while preserving high-quality color and texture. However, existing methods often fail to extract reliable feature representations due to severely degraded pixel-level information under low-light conditions, resulting in poor texture restoration, color inconsistency, and artifact.
