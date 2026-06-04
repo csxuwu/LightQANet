@@ -15,7 +15,7 @@ Extensive experiments on multiple low-light datasets demonstrate that our method
 
 ## Experiments:
 ### Real Workd
-<img src="images/fig1.png" width="800px">
+<img src="images/fig1.png" width="500px">
 
 ### Unpaired
 <img src="images/unpaired.jpeg" width="800px">
@@ -29,11 +29,10 @@ Extensive experiments on multiple low-light datasets demonstrate that our method
 ```
 @article{wu2025codebook,
   title={A codebook-driven approach for low-light image enhancement},
-  author={Wu, Xu and Hou, Xianxu and Lai, Zhihui and Zhou, Jie and Zhang, Ya-nan and Pedrycz, Witold and Shen, Linlin},
-  journal={Engineering Applications of Artificial Intelligence},
-  volume={156},
-  pages={111115},
-  year={2025},
+  author={Wu, Xu and Lai, Zhihui and Hou, Xianxu and Zhou, Jie and Zhang, Ya-nan and Shen, Linlin},
+  journal={IEEE Transactions on Multimedia},
+  year={2026},
+  doi={10.1109/TMM.2026.3668540}
   publisher={Elsevier}
 }
 ```
