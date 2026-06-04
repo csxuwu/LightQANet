@@ -4,7 +4,7 @@ This is the official PyTorch codes for the paper: [LightQANet: Quantized and Ada
 
 >This paper has been accepted to the IEEE Transactions on Multimedia (TMM) 2026.
 
-<img src="images/framework5.pdf" width="800px">
+<img src="images/framework.png" width="800px">
 
 ## Abstract:
 Low-light image enhancement (LLIE) aims to improve illumination while preserving high-quality color and texture. However, existing methods often fail to extract reliable feature representations due to severely degraded pixel-level information under low-light conditions, resulting in poor texture restoration, color inconsistency, and artifact.
@@ -14,14 +14,32 @@ From the dynamic adaptation perspective, we introduce a Light-Aware Prompt Modul
 Extensive experiments on multiple low-light datasets demonstrate that our method achieves state-of-the-art performance, delivering superior qualitative and quantitative results across various challenging lighting scenarios.
 
 ## Experiments:
-### LSRW
-<img src="images/LSRW.png" width="800px">
+### Real Workd
+<img src="images/fig1.png" width="800px">
 
-### Real World
-<img src="images/real_world.png" width="800px">
+### Unpaired
+<img src="images/unpaired.jpeg" width="800px">
 
 ## Dependencies and Installation
 
 - CUDA >= 11.0
 - Other required packages in `codeenhance.yaml`
 
+## Citation
+```
+@article{wu2025codebook,
+  title={A codebook-driven approach for low-light image enhancement},
+  author={Wu, Xu and Hou, Xianxu and Lai, Zhihui and Zhou, Jie and Zhang, Ya-nan and Pedrycz, Witold and Shen, Linlin},
+  journal={Engineering Applications of Artificial Intelligence},
+  volume={156},
+  pages={111115},
+  year={2025},
+  publisher={Elsevier}
+}
+```
+## License
+Licensed under a [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) for Non-commercial use only.
+Any commercial use should get formal permission first.
+
+## Acknowledgement
+This repository is maintained by [Xu Wu](https://csxuwu.github.io/).
