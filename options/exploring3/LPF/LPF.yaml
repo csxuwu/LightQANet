@@ -1,0 +1,111 @@
+# general settings
+
+name: &arch_type LightQANet_Arch
+model_type: Light_Pass_Filter_Model
+scale: &upscale 1
+num_gpu: 1 # set num_gpu: 0 for cpu mode
+manual_seed: 0
+debug: false
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: All_LOL_Dataset
+    type: All_LOL_Dataset  # AGLLNetDataset
+    dataroot: /home/wuxu/datasets/LL/all_lol_dataset # /home/wuxu/datasets/LL/AGLLNet/
+
+    reference_path: ~
+
+    is_noise: &is_noise true    # 是否有噪声
+    io_backend:
+      type: disk
+ 
+    gt_size: 256
+    use_resize_crop: true
+    use_flip: true
+    use_rot: false
+
+    # data loader
+    use_shuffle: true
+    batch_size_per_gpu: 16  # &bsz 4
+    num_worker_per_gpu: 4  # *bsz
+    dataset_enlarge_ratio: 1
+
+    prefetch_mode: ~
+#    num_prefetch_queue: *bsz
+
+  # 用不上
+  val:
+    name: AGLLNet_v2_Dataset
+    type: AGLLNet_v2_Dataset
+    dataroot: /home/wuxu/datasets/LL/AGLLNet/
+    is_reference: true
+    reference_path: ~
+    is_noise: *is_noise
+
+    resize: 256   # 61 arch 用到，因为内存不够
+
+    beta_range: [0.3, 1.5]
+    A_range: [0.25, 1.0]
+    color_p: 1.0
+    color_range: [-0.025, 0.025]
+    io_backend:
+      type: disk
+
+# network structures
+network_g:
+  type: *arch_type
+  gt_resolution: 256
+  norm_type: 'gn'
+  act_type: 'silu'
+  scale_factor: *upscale
+  weight_codebook_flag: true
+  weight_texture: 1
+  weight_style: 1
+  codebook_params:
+    - [64, 1024, 512]
+
+  LQ_stage: true
+  use_weight: false
+  use_semantic_loss: false
+
+  weight_alpha: -1.0
+  frozen_module_keywords: ['quantize', 'decoder_group', 'after_quant_group', 'out_conv']
+
+network_d:
+  type: UNetDiscriminatorSN 
+  num_in_ch: 512
+
+# path
+path:
+  pretrain_network_hq: /home/wuxu/codes/CodeEnhance/pretrain_networks/pretrained_HQPs.pth
+  pretrain_network_g: ~
+  pretrain_network_d: ~
+  strict_load: false 
+
+
+# training settings
+train:
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [5000, 10000, 15000, 20000, 250000, 300000, 350000]
+    gamma: 1 
+
+  total_iter: 50000 # 45000
+  warmup_iter: -1  # no warm up
+
+
+# validation settings·
+val:
+  val_freq: 500    # 5000
+
+
+# logging settings
+logger:
+  print_freq: 10
+  save_checkpoint_freq: !!float 1000
+  save_latest_freq: !!float 5e2
+  show_tf_imgs_freq: !!float 1e3
+#  show_tf_imgs_freq: 1
+  use_tb_logger: true

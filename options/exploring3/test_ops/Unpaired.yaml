@@ -1,0 +1,424 @@
+
+# 测试时需要改：
+# name
+# model_type
+# test：
+#   name，
+#   dataroot
+# network_g：
+#   type
+# path:
+#   pretrain_network_g, 注意使用的epcoh
+
+
+# general settings
+name: &arch_type LightQANet_Arch  # LLIE_Prior_CS21_ReW_Arch LLIE_Prior_OS_Refer_Sem_Skip4231_arch  LLIE_Prior_PromptV2_5_Arch
+# name: &arch_type LLIE_Prior_OS_Refer_Sem_Skip42_Arch
+model_type: LightQANet_Model # LLIE_Prior_Prompt5_Model  LLIE_Prior_OS_Refer22_Exp3_Model
+scale: &upscale 1
+num_gpu: 1 # set num_gpu: 0 for cpu mode
+manual_seed: 0
+debug: false
+
+path:
+  pretrain_network_hq: pretrain_networks/pretrained_HQPs.pth
+  pretrain_network_g: pretrain_networks/**.pth  # pretrained model weight
+
+  # pretrain_network_g: /home/wuxu/codes/promptenhance/pretrain_networks/LLIE_Prior_PromptV2_5_Arch_LOLv2_Syn_Dataset_20250408_225600.pth
+  pretrain_network_d: ~
+  strict_load: false 
+
+# dataset and data loader settings
+datasets:
+
+  test_LSRW_Huawei:
+    name: LSRW_Huawei_Dataset
+    type: Unpaired_Dataset
+    dataroot: /home/wuxu/datasets/LL/LSRW/Eval/Huawei/low
+    is_reference: false
+    reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance
+    is_noise: true
+    # resize: 256   # 61 arch 用到，因为内存不够
+    beta_range: [0.3, 1.5]
+    A_range: [0.25, 1.0]
+    color_p: 1.0
+    color_range: [-0.025, 0.025]
+    io_backend:
+      type: disk
+
+
+  # test_normal_light:
+  #   name: Normal_light
+  #   type: Unpaired_Dataset
+  #   dataroot: /data/xuwu/datasets/low_light/LOL_v2/Real_captured/Test/Normal
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance
+  #   is_noise: true
+  #   # resize: 256   # 61 arch 用到，因为内存不够
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test_LOLv2_real_Enhanced:
+  #   name: LOLv2_Real_Dataset_Enhanced_rec
+  #   type: Unpaired_Dataset
+  #   dataroot: /data/xuwu/codes/low_light/PromptEnhance/results/LLIE_Prior_PromptV2_5_Arch_LOLv2Real_All_20240811_105650/visualization/LOLv2_Real_Dataset_LL_enhanced
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance
+  #   is_noise: true
+  #   # resize: 256   # 61 arch 用到，因为内存不够
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test_LOLv2_real_Normal:
+  #   name: LOLv2_Real_Dataset_Normal
+  #   type: Unpaired_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/LOL_v2/Real_captured/Test/Low
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance
+  #   is_noise: true
+  #   # resize: 256   # 61 arch 用到，因为内存不够
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test_LOLv2_real_LL:
+  #   name: LOLv2_Real_Dataset_LL
+  #   type: Unpaired_Dataset
+  #   dataroot: /data/xuwu/datasets/low_light/LOL_v2/Real_captured/Test/Low
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance
+  #   is_noise: true
+  #   # resize: 256   # 61 arch 用到，因为内存不够
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test_LOLv2_Syn:
+  #   name: LOLv2_Synthetic
+  #   type: Unpaired_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/LOL_v2/Synthetic/Test/Low
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance
+  #   is_noise: true
+  #   # resize: 256   # 61 arch 用到，因为内存不够
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test_Exdark:
+  #   name: ExDark_Bus
+  #   type: Unpaired_Dataset
+  #   dataroot: /data/xuwu/datasets/low_light/ExDark/Bus
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance
+  #   is_noise: true
+  #   # resize: 256   # 61 arch 用到，因为内存不够
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test1:
+  #   name: VV           # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   type: Unpaired_Dataset    # Test_Dataset NASA_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/VV    # Nikon  Huawei
+
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/Reference_imags/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   is_noise: false
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test2:
+  #   name: MEF           # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   type: Unpaired_Dataset    # Test_Dataset NASA_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/MEF    # Nikon  Huawei
+
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/Reference_imags/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   is_noise: false
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test3:
+  #   name: NPE           # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   type: Unpaired_Dataset    # Test_Dataset NASA_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/NPE    # Nikon  Huawei
+
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/Reference_imags/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   is_noise: false
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+  # test4:
+  #   name: LIME           # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   type: Unpaired_Dataset    # Test_Dataset NASA_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/LIME    # Nikon  Huawei
+
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/Reference_imags/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   is_noise: false
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+  # test5:
+  #   name: NASA           # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   type: Unpaired_Dataset    # Test_Dataset NASA_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/NASA    # Nikon  Huawei
+
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/Reference_imags/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   is_noise: false
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+
+  # test:
+  #   name: FiveK_Dataset            # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   type: FiveK_Dataset    # Test_Dataset NASA_Dataset
+  #   dataroot: /home/wuxu/datasets/LL/FiveK/    # Nikon  Huawei
+
+  #   is_reference: true
+  #   reference_path: /home/wuxu/datasets/LL/Reference_imags/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   is_noise: false
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test_Real_wx20:
+  #   name: Real_wx20            # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   dataroot: /home/wuxu/datasets/LL/Real_wx20
+
+  #   is_reference: True
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   type: Test_Dataset    # Test_Dataset NASA_Dataset
+  #   is_noise: false
+  #   prefetch_mode: cpu
+  #   beta_range: [0.3, 1.5]
+  #   A_range: [0.25, 1.0]
+  #   color_p: 1.0
+  #   color_range: [-0.025, 0.025]
+  #   io_backend:
+  #     type: disk
+
+  # test_NASA:
+  #   name: NASA            # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   dataroot: /home/wuxu/datasets/LL/NASA
+
+  #   is_reference: True
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   type: Test_Dataset    # Test_Dataset NASA_Dataset
+  #   is_noise: false
+  #   beta_range: [ 0.3, 1.5 ]
+  #   A_range: [ 0.25, 1.0 ]
+  #   color_p: 1.0
+  #   color_range: [ -0.025, 0.025 ]
+  #   io_backend:
+  #     type: disk
+
+# #
+#   test_LIME:
+#     name: LIME            # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+#     dataroot: /home/wuxu/datasets/LL/LIME
+
+#     is_reference: false
+#     reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+#     type: Test_Dataset    # Test_Dataset NASA_Dataset
+#     is_noise: false
+#     beta_range: [0.3, 1.5]
+#     A_range: [0.25, 1.0]
+#     color_p: 1.0
+#     color_range: [-0.025, 0.025]
+#     io_backend:
+#       type: disk
+
+#   test_NPE:
+#     name: NPE            # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+#     dataroot: /home/wuxu/datasets/LL/NPE
+
+#     is_reference: false
+#     reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+#     type: Test_Dataset    # Test_Dataset NASA_Dataset
+#     is_noise: false
+#     beta_range: [ 0.3, 1.5 ]
+#     A_range: [ 0.25, 1.0 ]
+#     color_p: 1.0
+#     color_range: [ -0.025, 0.025 ]
+#     io_backend:
+#       type: disk
+
+  # test_MEF:
+  #   name: MEF            # Real_wx20, NASA, LIME, NPE, MEF, VV, DICM
+  #   dataroot: /home/wuxu/datasets/LL/MEF
+
+  #   is_reference: false
+  #   reference_path: /home/wuxu/datasets/LL/AGLLNet/test_enhance/  # /home/wuxu/datasets/LL/AGLLNet/test   /home/wuxu/datasets/LL/AGLLNet/test_enhance/
+
+  #   type: Test_Dataset    # Test_Dataset NASA_Dataset
+  #   is_noise: false
+  #   beta_range: [ 0.3, 1.5 ]
+  #   A_range: [ 0.25, 1.0 ]
+  #   color_p: 1.0
+  #   color_range: [ -0.025, 0.025 ]
+  #   io_backend:
+  #     type: disk
+
+# network structures
+network_g:
+  type: *arch_type
+  prompt_len: 3
+  gt_resolution: 256
+  norm_type: 'gn'
+  act_type: 'silu'
+  scale_factor: *upscale
+
+  use_weight: false
+  use_semantic_loss: false
+
+  use_skip: true
+  weight_texture: 1
+  weight_style: 1
+  weight_light: 1
+
+  weigt_shift: 1
+  weight_shift_reg: 0.0001
+
+  codebook_params:
+    - [64, 1024, 512]
+
+  LQ_stage: true
+  weight_codebook_type: 'wc_params' # wc_nc wc_ss  wc_params null
+  # weight_codebook_loss_type: 'seg_feat'   # seg_feat vgg_feat
+
+  weight_alpha: -1.0
+  frozen_module_keywords: ['quantize', 'decoder_group', 'after_quant_group', 'out_conv']
+
+network_d:
+  type: UNetDiscriminatorSN 
+  num_in_ch: 512
+
+# training settings
+train:
+  optim_g:
+    type: Adam
+    lr: !!float 1e-4
+    weight_decay: 0
+    betas: [0.9, 0.99]
+  optim_d:
+    type: Adam
+    lr: !!float 4e-4
+    weight_decay: 0
+    betas: [0.9, 0.99]
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [5000, 10000, 15000, 20000, 250000, 300000, 350000]
+    gamma: 1 
+
+  total_iter: 45000 # 45000
+  warmup_iter: -1  # no warm up
+
+  # losses
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1.0 
+    reduction: mean
+#
+#  perceptual_opt:
+#    type: LPIPSLoss
+#    loss_weight: !!float 1.0
+    
+  gan_opt:
+    type: GANLoss
+    gan_type: hinge
+    real_label_val: 1.0
+    fake_label_val: 0.0
+    loss_weight: 0.1
+
+  codebook_opt:
+    loss_weight: 1.0
+  
+  semantic_opt:
+    loss_weight: 0.1
+
+  net_d_iters: 1
+  net_d_init_iters: !!float 0 
+
+# validation settings·
+val:
+  val_freq: 5000    # 5000
+  save_img: true
+  suffix: null
+  key_metric: psnr
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 0    # RIDP： crop_border为 4 ，test_y_channel为 true，retinexformer：crop_border为 0 ，test_y_channel为 false，计算时psnr，ssim的值会小一点
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 0    # 4
+      test_y_channel: false
+#    lpips:
+#      type: lpips
+#      better: lower
+
+# logging settings
+logger:
+  print_freq: 10
+  save_checkpoint_freq: !!float 1e3
+  save_latest_freq: !!float 5e2
+  show_tf_imgs_freq: !!float 1e2
+#  show_tf_imgs_freq: 1
+  use_tb_logger: true
